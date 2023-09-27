@@ -80,7 +80,7 @@ func (c *ContractReader) getContractTypeFromAddress(address common.Address) (*ut
 func NewContractReader(producer producer.IProducer, listAddress map[common.Address]utils.Contract) IReader {
 	listParser := make(map[utils.ContractType]contractparser.IContractParser)
 	for _, contract := range listAddress {
-		listParser[contract.Type] = GetParser(contract.Type)
+		listParser[contract.Type] = getParser(contract.Type)
 	}
 	return &ContractReader{
 		producer:    producer,
@@ -88,7 +88,7 @@ func NewContractReader(producer producer.IProducer, listAddress map[common.Addre
 	}
 }
 
-func GetParser(contractType utils.ContractType) contractparser.IContractParser {
+func getParser(contractType utils.ContractType) contractparser.IContractParser {
 	switch contractType {
 	case utils.ERC20:
 		return parsers.NewErc20Parser()
