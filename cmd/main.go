@@ -26,6 +26,7 @@ func main() {
 	//create new producer
 	publisher := producer.NewNastProducer("topic")
 	//create new reader
+	//todo init list contract from config or redis
 	listContract := make(map[common.Address]utils.ContractType)
 	listContract[common.HexToAddress("0x123")] = utils.ERC20
 	reader := contract_reader.NewContractReader(publisher, listContract)

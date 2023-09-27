@@ -38,6 +38,7 @@ func (c *ContractReader) OnMessage(ctx context.Context, message *utils.MessageBl
 				logger.Errorf("failed to parse event: %v", err)
 				continue
 			}
+			//todo handle event with new pool address => add to list address with this contract type
 			events.Events = append(events.Events, event)
 		}
 	}
@@ -56,7 +57,7 @@ func (c *ContractReader) GetParser(contractType utils.ContractType) contractpars
 	case utils.ERC20:
 		return parsers.NewErc20Parser()
 	}
-	logger.Fatalf("contract %s: un supported", contractType)
+	logger.Fatalf("contract: %s unsupported", contractType)
 	panic("invalid contract type")
 }
 

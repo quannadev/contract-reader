@@ -30,7 +30,7 @@ func (c *ContractParser) ParseEvent(event *pb.Log, data interface{}) (*pb.Event,
 	if err != nil {
 		return nil, err
 	}
-	logger.Infof("parse event: %s", eventLog.Name)
+	logger.Debugf("parse event: %s", eventLog.Name)
 	contract := bind.NewBoundContract(common.HexToAddress(event.Address), c.contract, nil, nil, nil)
 	log := ConvertLog(event)
 	if err := contract.UnpackLog(data, eventLog.Name, log); err != nil {
@@ -47,7 +47,7 @@ func (c *ContractParser) ParseEvent(event *pb.Log, data interface{}) (*pb.Event,
 		TxHash:    event.GetTransactionHash(),
 		Address:   event.GetAddress(),
 		Data:      packedData,
-		Extra:     nil,
+		Extra:     nil, //todo call rpc get extra data
 		EventName: eventLog.Name,
 	}, nil
 }
