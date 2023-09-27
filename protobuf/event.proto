@@ -6,11 +6,11 @@ option go_package = "./pb";
 
 message Event {
   // TxHash is the transaction hash.
-  bytes tx_hash = 1;
+  string tx_hash = 1;
   // LogIndex is the index of the event log in the transaction.
-  uint32 log_index = 2;
+  uint64 log_index = 2;
   // Address of the contract emit this event.
-  bytes address = 3;
+  string address = 3;
   // EventName is the name of the event in this message.
   string event_name = 4;
   // Data is the event's data. Can be any message data below.
