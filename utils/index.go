@@ -2,6 +2,7 @@ package utils
 
 import (
 	"contract-reader/protobuf/pb"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 type MessageBlock struct {
@@ -15,3 +16,9 @@ const (
 	ERC20             ContractType = "ERC20"
 	UnSupportContract ContractType = "UnSupportContract"
 )
+
+type Contract struct {
+	Address    common.Address `json:"address"`
+	Type       ContractType   `json:"type"`
+	StartBlock uint64         `json:"start_block"`
+}

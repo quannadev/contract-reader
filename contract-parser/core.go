@@ -39,7 +39,8 @@ func (c *ContractParser) ParseEvent(event *pb.Log, data interface{}) (*pb.Event,
 	}
 	packedData, err := json.Marshal(data)
 	if err != nil {
-		logger.Errorf("failed to marshal data: %v", err)
+		logger.Fatalf("failed to marshal data: %v", err)
+		//panic application when marshal data failed
 		return nil, err
 	}
 	return &pb.Event{

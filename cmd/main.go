@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	config2 "contract-reader/config"
 	consumer2 "contract-reader/consumer"
 	contract_reader "contract-reader/contract-reader"
 	"contract-reader/producer"
@@ -21,14 +22,19 @@ func main() {
 		return
 	}
 	ctx := context.Background()
+	config := config2.NewConfig() //get config from env
+
 	//create new consumer
-	consumer := consumer2.NewNastConsumer(ctx, "topic")
+	consumer := consumer2.NewNastConsumer(ctx, config.Topic)
 	//create new producer
-	publisher := producer.NewNastProducer("topic")
+	publisher := producer.NewNastProducer(config.Topic)
+
 	//create new reader
 	//todo init list contract from config or redis
-	listContract := make(map[common.Address]utils.ContractType)
-	listContract[common.HexToAddress("0x123")] = utils.ERC20
+	listContract := make(map[common.Address]utils.Contract)
+	for _, contract := range config.GetListContracts() {
+		listContract[contract.Address] = contract
+	}
 	reader := contract_reader.NewContractReader(publisher, listContract)
 	//start consumer
 	blockChan := make(chan utils.MessageBlock)
