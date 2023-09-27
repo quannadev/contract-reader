@@ -1,0 +1,20 @@
+version: '3'
+
+networks:
+  nats:
+      driver: bridge
+
+services:
+  nats_server:
+    image: nats:latest
+    command:
+      - "-js"
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+      - "6222:6222"
+#    environment:
+#      - NATS_ENABLE_AUTH=yes
+#      - NATS_PASSWORD=my_password
+    networks:
+      - nats

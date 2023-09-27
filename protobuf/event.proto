@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package event;
+
+option go_package = "./pb";
+
+message Event {
+  // TxHash is the transaction hash.
+  bytes tx_hash = 1;
+  // LogIndex is the index of the event log in the transaction.
+  uint32 log_index = 2;
+  // Address of the contract emit this event.
+  bytes address = 3;
+  // EventName is the name of the event in this message.
+  string event_name = 4;
+  // Data is the event's data. Can be any message data below.
+  bytes data = 5;
+  // Extra is the extra information needed for consumer to use this event.
+  bytes extra = 6;
+}
+
+message Events {
+  // Events is a list of Event.
+  repeated Event events = 1;
+  // BlockNumber is the block number of the event.
+  uint64 block_number = 2;
+  // BlockHash is the block hash of the event.
+  bytes block_hash = 3;
+  // Timestamp is the timestamp of the event.
+  uint64 timestamp = 4;
+  // ChainID is the chain id of the event.
+  uint64 chain_id = 5;
+}
