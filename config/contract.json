@@ -3,7 +3,12 @@
     {
       "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
       "type": "ERC20",
-      "start_block": 0
+      "start_block": 0,
+      "events": [
+        "Transfer",
+        "Approval"
+      ],
+      "abi_path": "./abi-files/ERC20.json"
     }
   ]
 }

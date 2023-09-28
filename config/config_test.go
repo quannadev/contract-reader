@@ -1,7 +1,6 @@
 package config
 
 import (
-	"contract-reader/utils"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
@@ -19,6 +18,6 @@ func TestGetConfig(t *testing.T) {
 	contract := config.GetListContracts()
 	assert.Equal(t, len(contract), 1)
 	assert.Equal(t, contract[0].Address.String(), "0xdac17f958d2ee523a2206206994597c13d831ec7")
-	assert.Equal(t, contract[0].Type, utils.ERC20)
+	assert.Equal(t, contract[0].Type, "ERC20")
 	assert.Equal(t, contract[0].StartBlock, uint64(0))
 }

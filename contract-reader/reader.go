@@ -3,7 +3,6 @@ package contract_reader
 import (
 	"context"
 	contractparser "contract-reader/contract-parser"
-	"contract-reader/contract-parser/parsers"
 	"contract-reader/producer"
 	"contract-reader/protobuf/pb"
 	"contract-reader/utils"
@@ -16,7 +15,7 @@ import (
 type ContractReader struct {
 	producer    producer.IProducer
 	listAddress map[common.Address]utils.Contract
-	listParser  map[utils.ContractType]contractparser.IContractParser
+	listParser  map[common.Address]contractparser.IContractReader
 }
 
 func (c *ContractReader) OnMessage(ctx context.Context, message *utils.MessageBlock) {
@@ -44,7 +43,8 @@ func (c *ContractReader) handleBlock(block *pb.Block) *pb.Events {
 	}
 	for index, log := range block.Logs {
 		logger.Infof("log %d: %v", index, log)
-		contract, err := c.getContractTypeFromAddress(common.HexToAddress(log.Address))
+		logAddress := common.HexToAddress(log.Address)
+		contract, err := c.getContractTypeFromAddress(logAddress)
 		if err != nil {
 			logger.Errorf("failed to get contract type from address: %v", err)
 			continue
@@ -53,7 +53,7 @@ func (c *ContractReader) handleBlock(block *pb.Block) *pb.Events {
 			logger.Debugf("contract: %s not start yet", contract.Address.String())
 			continue
 		}
-		parser, ok := c.listParser[contract.Type]
+		parser, ok := c.listParser[logAddress]
 		if !ok {
 			logger.Errorf("parser not found for contract: %s", contract.Address.String())
 			continue
@@ -78,21 +78,12 @@ func (c *ContractReader) getContractTypeFromAddress(address common.Address) (*ut
 }
 
 func NewContractReader(producer producer.IProducer, listAddress map[common.Address]utils.Contract) IReader {
-	listParser := make(map[utils.ContractType]contractparser.IContractParser)
+	listParser := make(map[common.Address]contractparser.IContractReader)
 	for _, contract := range listAddress {
-		listParser[contract.Type] = getParser(contract.Type)
+		listParser[contract.Address] = contractparser.NewEventReader(contract.AbiPath, contract.Events)
 	}
 	return &ContractReader{
 		producer:    producer,
 		listAddress: listAddress,
 	}
-}
-
-func getParser(contractType utils.ContractType) contractparser.IContractParser {
-	switch contractType {
-	case utils.ERC20:
-		return parsers.NewErc20Parser()
-	}
-	logger.Fatalf("contract: %s unsupported", contractType)
-	panic("invalid contract type")
 }

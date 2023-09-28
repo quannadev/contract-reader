@@ -18,7 +18,7 @@ func ConvertLog(log *pb.Log) types.Log {
 	return types.Log{
 		Address:     common.HexToAddress(log.GetAddress()),
 		Topics:      ToArrayHash(log.GetTopics()),
-		Data:        common.Hex2Bytes(log.GetData()),
+		Data:        common.FromHex(log.GetData()),
 		BlockNumber: log.GetBlockNumber(),
 		TxHash:      common.HexToHash(log.GetTransactionHash()),
 		TxIndex:     uint(log.GetTransactionIndex()),

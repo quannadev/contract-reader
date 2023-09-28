@@ -8,22 +8,12 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi"
 )
 
-//go:embed ERC20.json
-var ERC20 []byte
-
-func GetAbiContract(contractType utils.ContractType) abi.ABI {
-	var abiContent []byte
-	switch contractType {
-	case utils.ERC20:
-		abiContent = ERC20
-		break
-	default:
-		logger.Fatalf("contract %s: un supported", contractType)
-	}
+func GetAbiContract(abiPath string) abi.ABI {
+	value, err := utils.ReadFile(abiPath)
 	var abiContract abi.ABI
-	abiContract, err := abi.JSON(bytes.NewReader(abiContent))
+	abiContract, err = abi.JSON(bytes.NewReader(value))
 	if err != nil {
-		logger.Fatalf("failed to get abi for contract %s: %v", contractType, err)
+		logger.Fatalf("failed to get abi for contract %s: %v", abiPath, err)
 	}
 	return abiContract
 }

@@ -10,15 +10,10 @@ type MessageBlock struct {
 	Callback func()
 }
 
-type ContractType string
-
-const (
-	ERC20             ContractType = "ERC20"
-	UnSupportContract ContractType = "UnSupportContract"
-)
-
 type Contract struct {
 	Address    common.Address `json:"address"`
-	Type       ContractType   `json:"type"`
+	Type       string         `json:"type"`
 	StartBlock uint64         `json:"start_block"`
+	AbiPath    string         `json:"abi_path"`
+	Events     []string       `json:"events"`
 }
